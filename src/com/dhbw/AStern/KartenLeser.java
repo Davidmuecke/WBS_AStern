@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class KartenLeser {
 
-    public static Karte readCSV(File f){
+    public static Feld[][] readCSV(File f){
         ArrayList<ArrayList<Feld>> felder = new ArrayList<>();
 
         try {
             BufferedReader bf = new BufferedReader(new FileReader(f));
-            int y =0;
+            int y = 0;
             String line = bf.readLine();
             while(line != null && !line.contains(";;")){
                 String[] values = line.split(";");
@@ -30,6 +30,6 @@ public class KartenLeser {
         for (int i = 0; i < felder.size(); i++) {
             felderArray[i] = felder.get(i).toArray(new Feld[1]);
         }
-        return new Karte(felderArray);
+        return felderArray;
     }
 }
