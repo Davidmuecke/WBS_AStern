@@ -2,7 +2,6 @@ package com.dhbw.AStern;
 
 import java.io.File;
 
-import javafx.util.Pair;
 
 public class Main {
 
@@ -10,8 +9,8 @@ public class Main {
     	// TODO Eingabe als Argumente der main Methode
     	// TODO Prüfung, ob Punkte auf der Karte liegen
     	File theInputFile = new File("C:\\Daten\\Jonathan\\repos\\WBS_AStern\\WBS_AStern\\src\\com\\dhbw\\AStern\\S_012_Daten.csv");
-    	Feld startFeld = new Feld(0,0,"0");
-    	Feld zielFeld = new Feld(14,14,"0");
+    	Feld startFeld = new Feld(0,14,"0");
+    	Feld zielFeld = new Feld(12,0,"0");
     	
     	
     	Karte theKarte = new Karte(KartenLeser.readCSV(theInputFile), startFeld, zielFeld);

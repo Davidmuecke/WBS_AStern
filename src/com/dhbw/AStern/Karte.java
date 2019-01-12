@@ -1,25 +1,51 @@
 package com.dhbw.AStern;
 
-import javafx.util.Pair;
 
 /**
- *
+ * Bildet eine Landkarte ab.
  */
 public class Karte {
+	/**
+	 * Felder der Karte.
+	 */
     private Feld[][] felder;
     
+    /**
+     * Startfeld auf der Karte.
+     */
     private Feld start;
+    
+    /**
+     * Zielfeld auf der Karte
+     */
     private Feld ziel;
 
+    /**
+     * Konstruktor zur Erzeugung einer Karte
+     * @param feld verschiedene Felder
+     * @param start Startfeld
+     * @param ziel Zielfeld
+     */
     public Karte(Feld[][] feld, Feld start, Feld ziel) {
         this.felder = feld;
         this.start = getFeld(start.getX(), start.getY());
         this.ziel = getFeld(ziel.getX(), ziel.getY());
     }
-
+    
+    /**
+     * Gibt das Feld an einer bestimmten Stelle der Karte zurück.
+     * @param x X-Koordinate
+     * @param y Y-Koordinate
+     * @return
+     * @throws IndexOutOfBoundsException
+     */
     public Feld getFeld(int x, int y) throws IndexOutOfBoundsException{
         return felder[y][x];
     }
+    
+    /**
+     * @return the felder
+     */
     public Feld[][] getFelder() {
         return felder;
     }
@@ -53,10 +79,16 @@ public class Karte {
 		ziel = this.getFeld(x, y);
 	}
 
+	/**
+	 * @return Die Breite der Landkarte.
+	 */
 	public int getWidth() {
     	return getFelder()[0].length;
     }
     
+	/**
+	 * @return Die Höhe der Landkarte
+	 */
     public int getHeight() {
     	return getFelder().length;
     }
@@ -78,7 +110,7 @@ public class Karte {
     }
     
     /**
-     * Schätzt den Abstand jedes Feldes auf dem Plan bis zum Ziel.
+     * Schätzt den Abstand jedes Feldes auf dem Plan bis zum Ziel optimistisch.
      * @param aZielfeld Zielfeld der Karte
      */
     public void calculateHFunction(Feld aZielfeld) {

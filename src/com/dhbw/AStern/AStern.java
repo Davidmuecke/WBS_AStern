@@ -33,37 +33,46 @@ public class AStern {
 			// Liste sortieren.
 			openList = sortList(openList);
 
-			Feld startFeld = openList.get(0).getFeld();
-			System.out.println("Select -> " + startFeld);
+			// Das erste Feld der sortierten Open-Liste wird als Ausgangsfeld der nächsten Operation gewählt.
+			Feld ausgangsFeld = openList.get(0).getFeld();
+			System.out.println("Select -> " + ausgangsFeld);
 
-			if (!startFeld.equals(getKarte().getZiel())) {
+			if (!ausgangsFeld.equals(getKarte().getZiel())) {
 
+				// Die Nachbarn des ausgangsfeldes werden ermittelt
 				ArrayList<Feld> neighbourList = new ArrayList<Feld>();
 
-				if (startFeld.getX() > 0) {
-					neighbourList.add(getKarte().getFeld(startFeld.getX() - 1, startFeld.getY()));
+				if (ausgangsFeld.getX() > 0) {
+					neighbourList.add(getKarte().getFeld(ausgangsFeld.getX() - 1, ausgangsFeld.getY()));
 				}
-				if (startFeld.getY() > 0) {
-					neighbourList.add(getKarte().getFeld(startFeld.getX(), startFeld.getY() - 1));
+				if (ausgangsFeld.getY() > 0) {
+					neighbourList.add(getKarte().getFeld(ausgangsFeld.getX(), ausgangsFeld.getY() - 1));
 				}
-				if (startFeld.getX() < karte.getWidth() - 1) {
-					neighbourList.add(getKarte().getFeld(startFeld.getX() + 1, startFeld.getY()));
+				if (ausgangsFeld.getX() < karte.getWidth() - 1) {
+					neighbourList.add(getKarte().getFeld(ausgangsFeld.getX() + 1, ausgangsFeld.getY()));
 				}
-				if (startFeld.getY() < karte.getHeight() - 1) {
-					neighbourList.add(getKarte().getFeld(startFeld.getX(), startFeld.getY() + 1));
+				if (ausgangsFeld.getY() < karte.getHeight() - 1) {
+					neighbourList.add(getKarte().getFeld(ausgangsFeld.getX(), ausgangsFeld.getY() + 1));
 				}
 
 				for (Feld neighbour : neighbourList) {
-					neighbour.setGvonx(startFeld.getGvonx() + startFeld.getKosten());
+					// G-Funktion des Nachbar-Feldes aufstellen.
+					neighbour.setGvonx(ausgangsFeld.getGvonx() + ausgangsFeld.getKosten());
+					
+					// G-Funktion des Nachbar-Feldes aufstellen.
 					neighbour.setFvonx(neighbour.getGvonx() + neighbour.getHvonx());
 
+					// Weg zum Nachbarfeld definieren.
 					Weg wegToNeighbour = new Weg(openList.get(0).getWeg());
 					wegToNeighbour.addFeld(openList.get(0).getFeld());
 
+					// Neues Listenelement für Nachbarfeld.
 					ListElement neighbourElement = new ListElement(neighbour, wegToNeighbour);
-
+					
+					// Flag zeigt an, ob sich das Feld bereits auf der Close-Liste befindet.
 					boolean isOnCloseListFlag = false;;
 					
+					// Es wird ermittelt, ob sich das Feld bereits auf der Close-Liste befindet.
 					for (ListElement element : closeList) {
 						if (element.getFeld().equals(neighbour)) {
 							isOnCloseListFlag = true;
@@ -73,6 +82,9 @@ public class AStern {
 					
 
 					if (!isOnCloseListFlag) {
+						// Befindet sich das Feld schon auf der Open-Liste?
+						// Wenn ja, wird geprüft, welcher Weg länger war und der kürzere behalten.
+						// Wenn nein, wird das Feld zur Open-Liste hinzugefügt.
 						for (ListElement element : openList) {
 							if (element.getFeld().equals(neighbour)) {
 								if (element.getGesamtkosten() >= neighbourElement.getGesamtkosten()) {
@@ -95,6 +107,7 @@ public class AStern {
 				}
 
 			} else {
+				// Das Ziel wurde erreicht, wenn das erste Feld auf der Open-Liste das Zielfeld ist.
 				System.out.println("ZIEL ERREICHT");
 				
 				// Zielfeld wird an den Weg angehängt
@@ -105,10 +118,12 @@ public class AStern {
 				// Der Weg wird zurückgegeben
 				return openList.get(0).getWeg();
 			}
+			// Das bearbeitete Feld wird von der Open-Liste gestrichen und zur Close-Liste hinzugefügt.
 			closeList.add(openList.get(0));
 			openList.remove(0);
 		}
 		
+		// Für den Fall, 
 		closeList.get(closeList.size() - 1).getWeg().addFeld(getKarte().getZiel());
 
 		// Das Element, das als letztes in die Close-Liste kam, wird zurückgegeben.
@@ -124,8 +139,7 @@ public class AStern {
 	}
 
 	/**
-	 * @param karte
-	 *            the karte to set
+	 * @param karte the karte to set
 	 */
 	public void setKarte(Karte karte) {
 		this.karte = karte;
@@ -135,17 +149,21 @@ public class AStern {
 		Collections.sort(aList, new Comparator<ListElement>() {
 			@Override
 			public int compare(ListElement element1, ListElement element2) {
-				return element1.getFeld().getFvonx().compareTo(element2.getFeld().getFvonx());
+				return new Double(element1.getFeld().getFvonx()).compareTo(element2.getFeld().getFvonx());
 			}
 		});
 		return aList;
 	}
 
-	private void printOpenList(ArrayList<ListElement> openList) {
+	/**
+	 * Druckt die Open-Liste in die Console.
+	 * @param aList Liste, die ausgegeben werden soll
+	 */
+	private void printOpenList(ArrayList<ListElement> aList) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("OpenList: ");
-		for (ListElement feld : openList) {
+		for (ListElement feld : aList) {
 			sb.append(feld.getFeld());
 		}
 		System.out.println(sb.toString());
