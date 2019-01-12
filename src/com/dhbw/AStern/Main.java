@@ -13,10 +13,12 @@ public class Main {
     	
     	// Datei, die die Landkarte enth‰lt.
     	File inputFile = new File(args[0]);
-    	// Feld auf dem die Wanderung begonnen wird.
-    	Feld startFeld = new Feld(new Integer(args[1]),new Integer(args[2]));
-    	// Ziel der Wanderung.
-    	Feld zielFeld = new Feld(new Integer(args[3]),new Integer(args[4]));
+    	// Feld auf dem die Wanderung begonnen wird. Da intern bei 0 angefangen wird,
+    	// aber nach auﬂen hin bei 1, wird hier eins abgezogen.
+    	Feld startFeld = new Feld(new Integer(args[1])-1,new Integer(args[2])-1);
+    	// Ziel der Wanderung. Da intern bei 0 angefangen wird,
+    	// aber nach auﬂen hin bei 1, wird hier eins abgezogen.
+    	Feld zielFeld = new Feld(new Integer(args[3])-1,new Integer(args[4])-1);
     	
     	// Landkarte.
     	Karte karte;
