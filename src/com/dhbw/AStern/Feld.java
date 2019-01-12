@@ -202,7 +202,7 @@ public class Feld implements Comparable<Feld>{
 	 */
 	@Override
 	public String toString() {
-		return "Feld [" + x + "," + y + "](" + getGelaendeAsString() +")";
+		return "Feld [" + (x+1) + "," + (y+1) + "](" + getGelaendeAsString() +")";
 	}
 	
 	/**
