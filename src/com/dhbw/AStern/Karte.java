@@ -25,8 +25,9 @@ public class Karte {
      * @param feld verschiedene Felder
      * @param start Startfeld
      * @param ziel Zielfeld
+     * @throws IndexOutOfBoundsException wenn Start oder Ziel Feld nicht auf der Karte liegt.
      */
-    public Karte(Feld[][] feld, Feld start, Feld ziel) {
+    public Karte(Feld[][] feld, Feld start, Feld ziel) throws IndexOutOfBoundsException{
         this.felder = feld;
         this.start = getFeld(start.getX(), start.getY());
         this.ziel = getFeld(ziel.getX(), ziel.getY());

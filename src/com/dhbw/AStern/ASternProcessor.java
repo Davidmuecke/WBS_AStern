@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class AStern {
+public class ASternProcessor {
 	private Karte karte;
 
-	public AStern(Karte aKarte) {
+	public ASternProcessor(Karte aKarte) {
 		setKarte(aKarte);
 	}
 
@@ -67,7 +67,6 @@ public class AStern {
 					// Besonderheit: der Erschöpfungswert spielt ebenfalls eine Rolle.
 					// Wenn das überqueren des Nachbarfeldes dazu führen würde, dass ein Pause gemacht werden muss,
 					// werden +5 zu f(x) dazu addiert.
-					System.out.println("E_FUNKTIOIN: " + calculateEFunktion(ausgangsElement, neighbour.getGelaende()));
 					double fVonX = gVonX + neighbour.getHvonx() + calculateEFunktion(ausgangsElement, neighbour.getGelaende());
 
 					// Weg zum Nachbarfeld definieren.
@@ -117,8 +116,7 @@ public class AStern {
 				}
 
 			} else {
-				// Das Ziel wurde erreicht, wenn das erste Feld auf der Open-Liste das Zielfeld ist.
-				System.out.println("ZIEL ERREICHT");
+				// Das Ziel wurde erreicht, da das erste Feld auf der Open-Liste das Zielfeld ist.
 				
 				// Zielfeld wird an den Weg angehängt
 				ausgangsElement.getWeg().addFeld(getKarte().getZiel());
@@ -133,7 +131,8 @@ public class AStern {
 			openList.remove(0);
 		}
 		
-		// Für den Fall, 
+		// Für den Fall, dass die open-List leer ist, wird der Weg zum letzten Feld der close-List
+		// als Weg zum Ziel ausgegeben.
 		closeList.get(closeList.size() - 1).getWeg().addFeld(getKarte().getZiel());
 
 		// Das Element, das als letztes in die Close-Liste kam, wird zurückgegeben.
@@ -175,7 +174,7 @@ public class AStern {
 
 		sb.append(aBezeichner + ": ");
 		for (ListElement feld : aList) {
-			sb.append(feld.getFeld());
+			sb.append("\n\t" + feld.getFeld());
 		}
 		System.out.println(sb.toString());
 	}

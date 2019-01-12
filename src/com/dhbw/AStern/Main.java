@@ -6,22 +6,37 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) {
-    	// TODO Eingabe als Argumente der main Methode
-    	// TODO Prüfung, ob Punkte auf der Karte liegen
-    	File theInputFile = new File("C:\\Daten\\Jonathan\\repos\\WBS_AStern\\WBS_AStern\\src\\com\\dhbw\\AStern\\S_012_Daten.csv");
-    	Feld startFeld = new Feld(0,0,"0");
-    	Feld zielFeld = new Feld(1,4,"0");
+    	if(args.length != 5) {
+    		System.out.println("Bitte Programm mit folgenden Parametern Aurufen:");
+    		return;
+    	}
     	
+    	// Datei, die die Landkarte enthält.
+    	File inputFile = new File(args[0]);
+    	// Feld auf dem die Wanderung begonnen wird.
+    	Feld startFeld = new Feld(new Integer(args[1]),new Integer(args[2]));
+    	// Ziel der Wanderung.
+    	Feld zielFeld = new Feld(new Integer(args[3]),new Integer(args[4]));
     	
-    	Karte theKarte = new Karte(KartenLeser.readCSV(theInputFile), startFeld, zielFeld);
+    	// Landkarte.
+    	Karte karte;
     	
-
+    	try {
+    		karte = new Karte(KartenLeser.readCSV(inputFile), startFeld, zielFeld);
+    	} catch (IndexOutOfBoundsException ex) {
+    		System.out.println("Startfeld oder Zielfeld liegen ausserhalb des Kartenbereichs.");
+    		return; 
+    	}
+    	
+    	// Gibt die Eingansparameter aus:
     	System.out.println("Startpukt: " + startFeld);
     	System.out.println("Zielpunkt: " + zielFeld);
-    	System.out.println(theKarte);
+    	System.out.println(karte);
     	
-    	AStern aStern = new AStern(theKarte);
+    	// Initialieren des ASternProzessors
+    	ASternProcessor aStern = new ASternProcessor(karte);
     	
+    	// Berechnung und Ausgabe des besten Weges vom Start zum Ziel
     	System.out.println(aStern.suche());
     }
 }

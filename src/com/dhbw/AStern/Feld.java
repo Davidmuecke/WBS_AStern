@@ -51,6 +51,15 @@ public class Feld implements Comparable<Feld>{
         this.y =y;
         this.gelaende = gelaende;
     }
+    
+    /**
+     * Konstruktor zur Erzeugung eines Feldes.
+     * @param x X-Koordinate
+     * @param y Y-Koordinate
+     */
+    public Feld(int x, int y){
+        this(x, y, "0");
+    }
 
     
 
@@ -178,13 +187,13 @@ public class Feld implements Comparable<Feld>{
 	 */
 	public int getKosten() {
 		switch(getGelaende()) {
-		case "0": return 7;
-		case "1": return 10;
-		case "2": return 4;
-		case "3": return 9;
-		case "4": return 5;
-		case "5": return 12;
-		default: return 0;
+			case "0": return 7;
+			case "1": return 10;
+			case "2": return 4;
+			case "3": return 9;
+			case "4": return 5;
+			case "5": return 12;
+			default: return 0;
 		}
 	}
 
@@ -193,7 +202,7 @@ public class Feld implements Comparable<Feld>{
 	 */
 	@Override
 	public String toString() {
-		return "Feld " + getGelaende() +"[" + x + "," + y + "] (f(x) =" + getFvonx() + ")";
+		return "Feld [" + x + "," + y + "](" + getGelaendeAsString() +")";
 	}
 	
 	/**
@@ -206,6 +215,21 @@ public class Feld implements Comparable<Feld>{
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * @return das Gelände des Feldes als String.
+	 */
+	private String getGelaendeAsString() {
+		switch(getGelaende()) {
+		case "0": return "Ebene";
+		case "1": return "Fluss";
+		case "2": return "Weg";
+		case "3": return "Wald";
+		case "4": return "Bruecke";
+		case "5": return "Felswand";
+		default:  return "";
+	}
 	}
 
 }

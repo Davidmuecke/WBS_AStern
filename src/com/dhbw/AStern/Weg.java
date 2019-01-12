@@ -143,18 +143,18 @@ public class Weg {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder theStringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
 
-		theStringBuilder.append("Weg:\n");
+		stringBuilder.append("Weg:\n");
 		for (int i = 0; i < getFelder().size() - 1; i++) {
-			theStringBuilder.append("Kosten " + getFelder().get(i).getKosten() + " von " + getFelder().get(i) + " nach "
+			stringBuilder.append("Kosten " + getFelder().get(i).getKosten() + " von " + getFelder().get(i) + " nach "
 					+ getFelder().get(i + 1) + "\n");
 		}
-		theStringBuilder.append("Schritte: " + getWeglaenge() + "\n");
-		theStringBuilder.append("Gesamtkosten: " + getGesamtkosten() + "\n");
-		theStringBuilder.append("Pausen: " + getPausen());
+		stringBuilder.append("Schritte: " + getWeglaenge() + "\n");
+		stringBuilder.append("Gesamtkosten: " + getGesamtkosten() + "\n");
+		stringBuilder.append("Pausen: " + getPausen());
 
-		return theStringBuilder.toString();
+		return stringBuilder.toString();
 	}
 
 	/**
