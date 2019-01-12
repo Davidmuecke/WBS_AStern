@@ -14,6 +14,7 @@ public class AStern {
 	public Weg suche() {
 		Feld start = getKarte().getStart();
 		Feld ziel = getKarte().getZiel();
+		
 
 		// Schätzt die H-Funktion der Karte.
 		getKarte().calculateHFunction(ziel);
@@ -29,12 +30,15 @@ public class AStern {
 		openList.add(new ListElement(start, new Weg()));
 
 		while (!openList.isEmpty()) {
-			printOpenList(openList);
 			// Liste sortieren.
 			openList = sortList(openList);
 
+			printList(openList, "OpenList");
+			printList(closeList, "CloseList");
+
 			// Das erste Feld der sortierten Open-Liste wird als Ausgangsfeld der nächsten Operation gewählt.
-			Feld ausgangsFeld = openList.get(0).getFeld();
+			ListElement ausgangsElement = openList.get(0);
+			Feld ausgangsFeld = ausgangsElement.getFeld();
 			System.out.println("Select -> " + ausgangsFeld);
 
 			if (!ausgangsFeld.equals(getKarte().getZiel())) {
@@ -57,14 +61,18 @@ public class AStern {
 
 				for (Feld neighbour : neighbourList) {
 					// G-Funktion des Nachbar-Feldes aufstellen.
-					neighbour.setGvonx(ausgangsFeld.getGvonx() + ausgangsFeld.getKosten());
+					double gVonX = ausgangsFeld.getGvonx() + ausgangsFeld.getKosten();
 					
-					// G-Funktion des Nachbar-Feldes aufstellen.
-					neighbour.setFvonx(neighbour.getGvonx() + neighbour.getHvonx());
+					// F-Funktion des Nachbar-Feldes aufstellen.
+					// Besonderheit: der Erschöpfungswert spielt ebenfalls eine Rolle.
+					// Wenn das überqueren des Nachbarfeldes dazu führen würde, dass ein Pause gemacht werden muss,
+					// werden +5 zu f(x) dazu addiert.
+					System.out.println("E_FUNKTIOIN: " + calculateEFunktion(ausgangsElement, neighbour.getGelaende()));
+					double fVonX = gVonX + neighbour.getHvonx() + calculateEFunktion(ausgangsElement, neighbour.getGelaende());
 
 					// Weg zum Nachbarfeld definieren.
-					Weg wegToNeighbour = new Weg(openList.get(0).getWeg());
-					wegToNeighbour.addFeld(openList.get(0).getFeld());
+					Weg wegToNeighbour = new Weg(ausgangsElement.getWeg());
+					wegToNeighbour.addFeld(ausgangsFeld);
 
 					// Neues Listenelement für Nachbarfeld.
 					ListElement neighbourElement = new ListElement(neighbour, wegToNeighbour);
@@ -87,16 +95,18 @@ public class AStern {
 						// Wenn nein, wird das Feld zur Open-Liste hinzugefügt.
 						for (ListElement element : openList) {
 							if (element.getFeld().equals(neighbour)) {
-								if (element.getGesamtkosten() >= neighbourElement.getGesamtkosten()) {
-									openList.add(new ListElement(neighbour, wegToNeighbour));
-									openList.remove(openList.indexOf(element));
-									closeList.add(element);
+								if (element.getFeld().getFvonx() >= fVonX) {
+									element.setWeg(wegToNeighbour);
+									element.getFeld().setFvonx(fVonX);
+									element.getFeld().setGvonx(gVonX);
 								} else {
 									closeList.add(neighbourElement);
 								}
 								break;
 							} else {
 								if (openList.get(openList.size() - 1).equals(element)) {
+									neighbour.setFvonx(fVonX);
+									neighbour.setGvonx(gVonX);
 									openList.add(new ListElement(neighbour, wegToNeighbour));
 									break;
 								}
@@ -111,15 +121,15 @@ public class AStern {
 				System.out.println("ZIEL ERREICHT");
 				
 				// Zielfeld wird an den Weg angehängt
-				openList.get(0).getWeg().addFeld(getKarte().getZiel());
+				ausgangsElement.getWeg().addFeld(getKarte().getZiel());
 				
 				// Weg wird als "WegZumZiel" markiert, damit das Zielfeld bei der Berechnung nicht einbezogen wird.
-				openList.get(0).getWeg().setIstWegZumZiel(true);
+				ausgangsElement.getWeg().setIstWegZumZiel(true);
 				// Der Weg wird zurückgegeben
-				return openList.get(0).getWeg();
+				return ausgangsElement.getWeg();
 			}
 			// Das bearbeitete Feld wird von der Open-Liste gestrichen und zur Close-Liste hinzugefügt.
-			closeList.add(openList.get(0));
+			closeList.add(ausgangsElement);
 			openList.remove(0);
 		}
 		
@@ -158,15 +168,67 @@ public class AStern {
 	/**
 	 * Druckt die Open-Liste in die Console.
 	 * @param aList Liste, die ausgegeben werden soll
+	 * @param aBezeichner wie die Liste heißen soll
 	 */
-	private void printOpenList(ArrayList<ListElement> aList) {
+	private void printList(ArrayList<ListElement> aList, String aBezeichner) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("OpenList: ");
+		sb.append(aBezeichner + ": ");
 		for (ListElement feld : aList) {
 			sb.append(feld.getFeld());
 		}
 		System.out.println(sb.toString());
+	}
+	
+	/**
+	 * Berechnet die den Wert der e-Funktion (Einfluss der Erschöpfung).
+	 * @param anElement aktuelles Listen Element.
+	 * @param aGelaende Gelände des möglichen nächsten Feldes des Weges.
+	 * @return Wert der E-Funktion für dsa nächste mögliche Feld des Weges.
+	 */
+	private double calculateEFunktion(ListElement anElement, String aGelaende) {
+		double erschoepfungswert = anElement.getWeg().getErschoepfung();
+		double erschoepfungseinfluss = 0;
+		
+		// Beim Erschöpfungswert muss auch das aktuelle Feld beachtet werden.
+		switch(anElement.getFeld().getGelaende()) {
+			case "0": erschoepfungswert += 0;
+			break;
+			case "1": erschoepfungswert += 4;
+			break;
+			case "2": erschoepfungswert += 0;
+			break;
+			case "3": erschoepfungswert =  erschoepfungswert/ 2;
+			break;
+			case "4": erschoepfungswert += 0;
+			break;
+			case "5": erschoepfungswert += 3;
+			break;
+			default:  erschoepfungswert += 0;
+		}
+		// Was passiert mit dem Erschöpfungswert, wenn das potentiell nächste Feld verlassen wird?
+		// Wenn der Wert größer als 10 wird muss eine Pause gemacht werden.
+		// Eine Pause hat die Kosten 5. Deshalb werden in diesem Fall ein Erschöpfungseinfluss von 5
+		// in die Berechnung des Wertes der F-Funktion mit einbezogen.
+		// Wird der Erschöpfungswert durch das Laufen im Wald verringert, wirkt das möglichen spätern
+		// Pausen entgegen. Das macht das Feld attraktiver. Das wird im Wert der F-Funktion ausgedrückt,
+		// in dem dieser um den Betrag der Verringerung des Erschöpfungswertes verringert wird.
+		switch(aGelaende) {
+			case "1": 
+				if(erschoepfungswert > 6) {
+					erschoepfungseinfluss = 5;
+				}
+			break;
+			case "3": erschoepfungseinfluss =  - (erschoepfungswert/ 2);
+			break;
+			case "5": 
+				if(erschoepfungswert > 7) {
+					erschoepfungseinfluss = 5;
+				}
+			break;
+			default:  erschoepfungseinfluss = 0;
+		}
+		return erschoepfungseinfluss;
 	}
 
 }

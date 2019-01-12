@@ -117,7 +117,7 @@ public class Karte {
     	for (int x = 0; x < getWidth(); x++) {
     		for(int y = 0; y < getHeight(); y++) {
     			int xDistanz = Math.abs(x - aZielfeld.getX());
-    			int yDistanz = Math.abs(x - aZielfeld.getY());
+    			int yDistanz = Math.abs(y - aZielfeld.getY());
     			
     			getFeld(x,y).setHvonx(Math.sqrt(Math.pow(xDistanz, 2)+ Math.pow(yDistanz, 2)));
     		}

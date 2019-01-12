@@ -19,6 +19,8 @@ public class ListElement {
 	 */
 	private Feld feld;
 	
+	
+	
 	/**
 	 * Konstruktor zur Erzeugung eines Listen-Elements.
 	 * @param aFeld Feld, zu dem der Weg führt.
@@ -55,8 +57,10 @@ public class ListElement {
 		this.feld = feld;
 	}
 	
+	
+
 	/**
-	 * Hängt ein weiters Feld an den Weg an.
+	 * Hängt ein weiters Feld an den Weg an und berechnet den neuen Erschoepfungswert.
 	 * @param aFeld neues Feld.
 	 */
 	public void addFeldToWeg(Feld aFeld) {

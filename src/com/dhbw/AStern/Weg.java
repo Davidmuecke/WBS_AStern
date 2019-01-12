@@ -15,6 +15,16 @@ public class Weg {
 	 * um den Lösungsweg schön darstellen zu können.
 	 */
 	private boolean istWegZumZiel;
+	
+	/**
+	 * Erschöpfungszähler.
+	 */
+	private double erschoepfung;
+	
+	/**
+	 * Pausen
+	 */
+	private int pausen;
 
 	/**
 	 * Konstruktor zum erzeugen eines leeren Wegs
@@ -22,6 +32,7 @@ public class Weg {
 	public Weg() {
 		setFelder(new ArrayList<Feld>());
 		setIstWegZumZiel(false);
+		setErschoepfung(0.0);
 	}
 
 	/**
@@ -35,6 +46,8 @@ public class Weg {
 			getFelder().add(feld);
 		}
 		setIstWegZumZiel(false);
+		setErschoepfung(aWeg.getErschoepfung());
+		setPausen(aWeg.getPausen());
 	}
 
 	/**
@@ -58,6 +71,26 @@ public class Weg {
 	 */
 	public void addFeld(Feld aFeld) {
 		felder.add(aFeld);
+
+		switch(aFeld.getGelaende()) {
+			case "0": setErschoepfung(getErschoepfung() + 0);
+			break;
+			case "1": setErschoepfung(getErschoepfung() + 4);
+			break;
+			case "2": setErschoepfung(getErschoepfung() + 0);
+			break;
+			case "3": setErschoepfung(getErschoepfung() / 2);
+			break;
+			case "4": setErschoepfung(getErschoepfung() + 0);
+			break;
+			case "5": setErschoepfung(getErschoepfung() + 3);
+			break;
+			default:  setErschoepfung(getErschoepfung() + 0);
+		}
+		if(getErschoepfung() >= 10) {
+			setErschoepfung(getErschoepfung() -10 );
+			setPausen(getPausen()+ 1);
+		}
 	}
 
 	/**
@@ -73,6 +106,34 @@ public class Weg {
 	 */
 	public void setIstWegZumZiel(boolean istWegZumZiel) {
 		this.istWegZumZiel = istWegZumZiel;
+	}
+	
+	/**
+	 * @return the erschoepfung
+	 */
+	public double getErschoepfung() {
+		return erschoepfung;
+	}
+
+	/**
+	 * @param erschoepfung the erschoepfung to set
+	 */
+	public void setErschoepfung(double erschoepfung) {
+		this.erschoepfung = erschoepfung;
+	}
+
+	/**
+	 * @return the pausen
+	 */
+	public int getPausen() {
+		return pausen;
+	}
+
+	/**
+	 * @param pausen the pausen to set
+	 */
+	public void setPausen(int pausen) {
+		this.pausen = pausen;
 	}
 
 	/*
@@ -90,7 +151,8 @@ public class Weg {
 					+ getFelder().get(i + 1) + "\n");
 		}
 		theStringBuilder.append("Schritte: " + getWeglaenge() + "\n");
-		theStringBuilder.append("Gesamtkosten: " + getGesamtkosten());
+		theStringBuilder.append("Gesamtkosten: " + getGesamtkosten() + "\n");
+		theStringBuilder.append("Pausen: " + getPausen());
 
 		return theStringBuilder.toString();
 	}
@@ -115,8 +177,11 @@ public class Weg {
 		if (istWegZumZiel) {
 			gesamtkosten -= getFelder().get(getFelder().size() - 1).getKosten();
 		}
+		
+		gesamtkosten += getPausen()*5;
 		return gesamtkosten;
 	}
+	
 
 	/**
 	 * Ermittelt die Gesamtlänge eines Weges in Feldern.
@@ -132,5 +197,5 @@ public class Weg {
 		}
 		return getFelder().size();
 	}
-
+	
 }

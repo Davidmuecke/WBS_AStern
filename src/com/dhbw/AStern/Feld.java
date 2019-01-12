@@ -1,5 +1,6 @@
 package com.dhbw.AStern;
 
+
 /**
  * Stellt ein Feld der Karte dar
  *
@@ -192,7 +193,19 @@ public class Feld implements Comparable<Feld>{
 	 */
 	@Override
 	public String toString() {
-		return "Feld [x=" + x + ", y=" + y + "]";
+		return "Feld " + getGelaende() +"[" + x + "," + y + "] (f(x) =" + getFvonx() + ")";
+	}
+	
+	/**
+	 * Gibt zurück, ob das andere Feld die selbe Position hat.
+	 * @param aFeld Feld, mit dem verglichen wird.
+	 * @return
+	 */
+	public boolean samePosition(Feld aFeld) {
+		if(getX() == aFeld.getX() && getY() == aFeld.getY()) {
+			return true;
+		}
+		return false;
 	}
 
 }
