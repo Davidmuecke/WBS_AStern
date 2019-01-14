@@ -2,12 +2,33 @@ package com.dhbw.AStern;
 
 import java.io.File;
 
-
+/**
+ * Hauptklasse zum Starten des Programms.
+ * @author Jonathan Weyl
+ *
+ */
 public class Main {
 
+	/**
+	 * Main-Methode zum Ausführen des Programms
+	 * @param args Zu übergebende Argumente
+	 * [0]	-	Pfad zur Datei, die die Karte enthält (im csv-Format)
+	 * [1]	-	X-Koordinate des Startpunktes
+	 * [2]	-	Y-Koordinate des Startpunktes
+	 * [3]	-	X-Koordinate des Zielpunktes
+	 * [4]	-	Y-Koordinate des Zielpunktes
+	 */
     public static void main(String[] args) {
     	if(args.length != 5) {
-    		System.out.println("Bitte Programm mit folgenden Parametern Aurufen:");
+    		StringBuilder stringBuilder = new StringBuilder();
+    		stringBuilder.append("Bitte Programm mit folgenden Parametern Aurufen:\n");
+    		stringBuilder.append("[0]	-	Pfad zur Datei, die die Karte enthält (im csv-Format)\n");
+    		stringBuilder.append("[1]	-	X-Koordinate des Startpunktes\n");
+    		stringBuilder.append("[2]	-	Y-Koordinate des Startpunktes\n");
+    		stringBuilder.append("[3]	-	X-Koordinate des Zielpunktes\n");
+    		stringBuilder.append("[4]	-	Y-Koordinate des Zielpunktes");
+    		
+    		System.out.println(stringBuilder.toString());
     		return;
     	}
     	

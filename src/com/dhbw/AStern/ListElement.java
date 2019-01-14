@@ -67,11 +67,5 @@ public class ListElement {
 		getWeg().addFeld(aFeld);
 	}
 	
-	/**
-	 * Berechnet die Gesamtkosten des Weges.
-	 * @return Gesamtkosten des Weges.
-	 */
-	public int getGesamtkosten() {
-		return getWeg().getGesamtkosten();
-	}
+	
 }
